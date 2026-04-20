@@ -32,14 +32,15 @@ public class LibraryApp {
         };
         boolean programIsRunning = true;
         while(programIsRunning){
-            System.out.print("Home screen\n" +
-                             "\n" +
-                             "Choose an option:\n" +
-                             "1 - Show available books.\n" +
-                             "2 - Show checked out books.\n" +
-                             "3 - Exit home screen\n" +
-                             "\n" +
-                             "Enter command here:");
+            System.out.print("""
+                    Home screen
+                    
+                    Choose an option:
+                    1 - Show available books.
+                    2 - Show checked out books.
+                    3 - Exit home screen
+                    
+                    Enter command here:""");
             int command = scanner.nextInt();
             scanner.nextLine();
             switch(command){
@@ -65,27 +66,24 @@ public class LibraryApp {
 
 
         static void showAvailableBooksScreen(){
-            int count = 0;
 
             for(Book book : books){
                 if(book != null){
                     System.out.printf("ID: %d%n Isbn: %s%n Title: %s%n", book.getId(), book.getIsbn(),
                             book.getTitle());
-                    count++;}}
+                }}
             boolean showAvailableBooksScreen = true;
             while(showAvailableBooksScreen){
                 System.out.print("""
-                        Choose an option: 
-                        
-                        (C)heck out book. 
+                        Choose an option:\s
+                       \s
+                        (C)heck out book.\s
                         (R)eturn to home screen.
-                         
-                        Enter option here: """);
+                        \s
+                        Enter option here:\s""");
                 String choice = scanner.nextLine();
                 switch(choice.toUpperCase()){
-                    case "C" -> {
-                        checkOutBook();
-                     break;}
+                    case "C" -> checkOutBook();
                     case "R" -> showAvailableBooksScreen = false;
                     default -> System.out.println("Invalid option, please try again");
 
@@ -144,13 +142,13 @@ public class LibraryApp {
                 }}
                 boolean showCheckout = true;
                 while(showCheckout){
-                    System.out.println("""
+                    System.out.print("""
                             Choose an option:
-                            
+                           \s
                             1 - Check in a book.
-                            2 - Return to home screen. 
-                            
-                            Enter option here: """);
+                            2 - Return to home screen.\s
+                           \s
+                            Enter option here:\s""");
                     int choice = scanner.nextInt();
                     scanner.nextLine();
                     switch (choice){
@@ -181,7 +179,7 @@ public class LibraryApp {
                 }
             }
 
-            System.out.println("Book not found or it is not currently checked out.");
+            System.out.println("Book not found or it is not currently checked out!");
         }
 
 
