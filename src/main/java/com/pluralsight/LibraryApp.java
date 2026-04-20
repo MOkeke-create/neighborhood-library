@@ -32,20 +32,19 @@ public class LibraryApp {
         };
         boolean programIsRunning = true;
         while(programIsRunning){
-            System.out.print("""
-                    Home screen
-            
-                    Choose an option:
-                    1 - Show available books.
-                    2 - Show checked out books.
-                    3 - Exit home screen
-                    
-                    Enter command here: """);
+            System.out.print("Home screen\n" +
+                             "\n" +
+                             "Choose an option:\n" +
+                             "1 - Show available books.\n" +
+                             "2 - Show checked out books.\n" +
+                             "3 - Exit home screen\n" +
+                             "\n" +
+                             "Enter command here:");
             int command = scanner.nextInt();
             scanner.nextLine();
             switch(command){
-                case 1 -> availableBooks();
-                case 2 -> checkedOut();
+                case 1 -> showAvailableBooksScreen();
+                case 2 -> showCheckout();
                 case 3 -> programIsRunning = false;
                 default -> System.out.println("Invalid option. Try again!");
 
@@ -65,22 +64,126 @@ public class LibraryApp {
 
 
 
-        static void availableBooks(){
+        static void showAvailableBooksScreen(){
             int count = 0;
+
             for(Book book : books){
                 if(book != null){
                     System.out.printf("ID: %d%n Isbn: %s%n Title: %s%n", book.getId(), book.getIsbn(),
                             book.getTitle());
-                    count++;}
+                    count++;}}
+            boolean showAvailableBooksScreen = true;
+            while(showAvailableBooksScreen){
+                System.out.print("""
+                        Choose an option: 
+                        
+                        (C)heck out book. 
+                        (R)eturn to home screen.
+                         
+                        Enter option here: """);
+                String choice = scanner.nextLine();
+                switch(choice.toUpperCase()){
+                    case "C" -> {
+                        checkOutBook();
+                     break;}
+                    case "R" -> showAvailableBooksScreen = false;
+                    default -> System.out.println("Invalid option, please try again");
+
+
+
+                }
+
 
             }
 
+
+
+
+        }
+
+        static void checkOutBook(){
+            System.out.print("Enter the ID of the book to check out: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            for(Book book : books){
+                if(book != null && book.getId() == id && !book.isCheckOut()){
+                    System.out.print("Enter your name: ");
+                    String name = scanner.nextLine();
+
+                    book.setCheckOut(true);
+                    book.setCheckOutTo(name);
+
+                    System.out.printf("You have successfully checked out %s %n", book.getTitle());
+                    return;
+                }
+            }
+            System.out.println("Book not found or already checked out.");
         }
 
 
-        static void checkedOut(){
 
+
+        static void showCheckout(){
+            boolean found = false;
+
+            for (Book book : books) {
+
+                if (book != null && book.isCheckOut()){
+                    System.out.printf("""
+                    ID: %d
+                    ISBN: %s
+                    Title: %s
+                    Checked out to: %s
+                    
+                    """,
+                            book.getId(),
+                            book.getIsbn(),
+                            book.getTitle(),
+                            book.getCheckOutTo());
+                    found = true;
+                }}
+                boolean showCheckout = true;
+                while(showCheckout){
+                    System.out.println("""
+                            Choose an option:
+                            
+                            1 - Check in a book.
+                            2 - Return to home screen. 
+                            
+                            Enter option here: """);
+                    int choice = scanner.nextInt();
+                    scanner.nextLine();
+                    switch (choice){
+                        case 1 -> checkInBook();
+                        case 2 -> showCheckout = false;
+                        default -> System.out.println("Invalid option, please try again!");
+                }
+            }
+            if(!found){
+                System.out.println("No books are currently checked out");
+            }
         }
+
+        static void checkInBook(){
+            System.out.print("Enter the ID of the book to return: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+
+            for (Book book : books) {
+
+                if (book != null && book.getId() == id && book.isCheckOut()) {
+
+                    book.setCheckOut(false);
+                    book.setCheckOutTo("");
+
+                    System.out.printf("'%s' has been successfully returned.%n", book.getTitle());
+                    return;
+                }
+            }
+
+            System.out.println("Book not found or it is not currently checked out.");
+        }
+
 
 
 
